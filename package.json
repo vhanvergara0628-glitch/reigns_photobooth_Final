@@ -2,6 +2,7 @@
   "name": "photo-booth-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://vhanvergara0628-glitch.github.io/reigns_photobooth_Final/",
   "dependencies": {
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^6.9.1",
