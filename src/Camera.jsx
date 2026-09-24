@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
+import { playShutter, playTick, unlockAudio } from './sounds';
 import {
   Camera as CameraIcon,
   CircleInfoSolid,
   Clock,
+  Crown,
   Refresh,
   Sparkles,
   Zap,
@@ -38,6 +40,7 @@ function Camera({ onProceed }) {
 
   const webcamRef = useRef(null);
   const photosCountRef = useRef(0);
+  const lastTickRef = useRef(0); // dedupe countdown ticks (StrictMode-safe)
 
   const currentPhoto = Math.min(photos.length + 1, MAX_PHOTOS);
 
@@ -86,6 +89,7 @@ function Camera({ onProceed }) {
 
   // Start a new booth session (from the setup screen)
   const startSession = useCallback(() => {
+    unlockAudio(); // create/resume audio from this user gesture
     setPhotos([]);
     photosCountRef.current = 0;
     setStandby(true);
@@ -118,12 +122,24 @@ function Camera({ onProceed }) {
     }
     captureFrame();
     setIsFlash(true);
+    playShutter();
     const pause = setTimeout(() => {
       setIsFlash(false);
       setStandby(true);
     }, 320);
     return () => clearTimeout(pause);
   }, [phase, standby, countdown, captureFrame]);
+
+  // Tick sound for every second of the countdown, final blip on the last one
+  useEffect(() => {
+    if (phase !== 'running' || standby || countdown <= 0) {
+      lastTickRef.current = 0;
+      return;
+    }
+    if (lastTickRef.current === countdown) return;
+    lastTickRef.current = countdown;
+    playTick(countdown === 1);
+  }, [phase, standby, countdown]);
 
   // When the 4th photo lands, announce completion and move on
   useEffect(() => {
@@ -171,8 +187,8 @@ function Camera({ onProceed }) {
           {/* Header */}
           <div className="mb-5 flex items-center justify-between">
             <h1 className="flex items-center gap-2 text-xl font-black uppercase tracking-widest text-white drop-shadow">
-              <Sparkles className="text-amber-300" width={26} height={26} />
-              Photo Booth
+              <Crown className="animate-pop-in text-amber-300" width={26} height={26} />
+              Reign's Photobooth
             </h1>
             {phase === 'running' && (
               <button

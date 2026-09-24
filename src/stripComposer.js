@@ -41,7 +41,7 @@ export const BG_COLORS = ['#ffffff', '#18181b', '#f5f3ff', '#fbe3fb', '#e0f0ff',
 
 export const DEFAULT_CONFIG = (photos) => ({
   photos,
-  brand: 'PHOTO BOOTH',
+  brand: "Reign's Photobooth",
   borderColor: '#ffffff',
   bgColor: '#ffffff',
   filter: 'normal',
@@ -138,7 +138,7 @@ function applyFilterToImage(img, filterName) {
 export default async function composeStrip(config) {
   const cfg = config || {};
   const photos = cfg.photos || [];
-  const brand = (cfg.brand || 'PHOTO BOOTH').toUpperCase();
+  const brand = (cfg.brand || "Reign's Photobooth").toUpperCase();
   const borderColor = cfg.borderColor || '#ffffff';
   const bgColor = cfg.bgColor || '#ffffff';
   const stickers = cfg.stickers || [];

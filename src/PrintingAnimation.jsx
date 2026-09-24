@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Loader, Printer } from 'pixelarticons/react';
+import { playReadyChime, startPrinting, stopPrinting } from './sounds';
 
 /**
  * PrintingAnimation.jsx
@@ -22,6 +23,19 @@ function PrintingAnimation({ stripSrc, onDone }) {
       clearTimeout(t2);
     };
   }, [onDone]);
+
+  // Machine sound while the strip prints, chime when it's done
+  useEffect(() => {
+    startPrinting();
+    return () => stopPrinting();
+  }, []);
+
+  useEffect(() => {
+    if (stage === 'ready') {
+      stopPrinting();
+      playReadyChime();
+    }
+  }, [stage]);
 
   const displayW = Math.min(240, window.innerWidth - 40);
   const displayH = natural ? Math.round((displayW * natural) / 720) : undefined;
@@ -46,7 +60,7 @@ function PrintingAnimation({ stripSrc, onDone }) {
             <Printer width={44} height={44} />
           </span>
           <p className="mt-1 text-[10px] font-black uppercase tracking-[0.3em] text-white/70">
-            Photo Booth
+            Reign's Photobooth
           </p>
           <div className="mt-3 h-2 w-3/4 rounded-full bg-black" />
         </div>

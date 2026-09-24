@@ -193,7 +193,7 @@ function StripEditor({ config, onCancel, onApply }) {
                 value={work.brand || ''}
                 maxLength={26}
                 onChange={(e) => setWorkFields({ brand: e.target.value })}
-                placeholder="PHOTO BOOTH"
+                placeholder="Reign's Photobooth"
                 className="mt-2 w-full rounded-xl bg-white/15 px-4 py-3 font-bold text-white placeholder-white/40 ring-1 ring-white/20 outline-none transition focus:ring-2 focus:ring-purple-400"
               />
             </label>
